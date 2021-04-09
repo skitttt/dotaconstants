@@ -695,15 +695,21 @@ const sources = [
           hero_name: hd_hero.name,
           hero_id:   hd_hero.id,
           
-          has_scepter: false,
-          scepter_desc: "",
-          scepter_skill_name: "",
-          scepter_new_skill: false,
-          
-          has_shard: false,
-          shard_desc:   "",
-          shard_skill_name: "",
-          shard_new_skill: false,
+          scepter: 
+          {
+            desc: "",
+            skill_name: "",
+            skill_name_loc: "",
+            new_skill: false,
+          },
+
+          shard:
+          {
+            desc: "",
+            skill_name: "",
+            skill_name_loc: "",
+            new_skill: false,
+          }
         }
 
         hd_hero.abilities.forEach( (ability) => {
@@ -717,48 +723,51 @@ const sources = [
           if(ability.ability_is_granted_by_scepter)
           {
             // scepter grants new ability
-            aghs_element.scepter_desc       = ability.desc_loc;
-            aghs_element.scepter_skill_name = ability.name_loc;
-            aghs_element.scepter_new_skill  = true;
-            aghs_element.has_scepter        = true;
+            aghs_element.scepter.desc           = ability.desc_loc;
+            aghs_element.scepter.skill_name_loc = ability.name_loc;
+            aghs_element.scepter.skill_name     = ability.name;
+            aghs_element.scepter.new_skill      = true;
           }
           else if(ability.ability_has_scepter && !(ability.scepter_loc == ""))
           {
             // scepter ugprades an ability
-            aghs_element.scepter_desc       = ability.scepter_loc;
-            aghs_element.scepter_skill_name = ability.name_loc;
-            aghs_element.scepter_new_skill  = false;
-            aghs_element.has_scepter        = true;
+            aghs_element.scepter.desc           = ability.scepter_loc;
+            aghs_element.scepter.skill_name_loc = ability.name_loc;
+            aghs_element.scepter.skill_name     = ability.name;
+            aghs_element.scepter.new_skill      = false;
           }
           // -------------- Shard  --------------
           if(ability.ability_is_granted_by_shard)
           {
             // scepter grants new ability
-            aghs_element.shard_desc       = ability.desc_loc;
-            aghs_element.shard_skill_name = ability.name_loc;
-            aghs_element.shard_new_skill  = true;
-            aghs_element.has_shard        = true;
+            aghs_element.shard.desc           = ability.desc_loc;
+            aghs_element.shard.skill_name_loc = ability.name_loc;
+            aghs_element.shard.skill_name     = ability.name;
+            aghs_element.shard.new_skill      = true;
           }                                     
           else if(ability.ability_has_shard && !(ability.shard_loc == ""))
           {
             // scepter ugprades an ability
-            aghs_element.shard_desc       = ability.shard_loc;
-            aghs_element.shard_skill_name = ability.name_loc;
-            aghs_element.shard_new_skill  = false;
-            aghs_element.has_shard        = true;
+            aghs_element.shard.desc           = ability.shard_loc;
+            aghs_element.shard.skill_name_loc = ability.name_loc;
+            aghs_element.shard.skill_name     = ability.name;
+            aghs_element.shard.new_skill      = false;
           }
         });
 
         // Error handling
-        if(!aghs_element.has_shard)
+        if(aghs_element.scepter.skill_name == "")
         {
+          aghs_element.scepter  = null
           console.log(aghs_element.hero_name + "[" + aghs_element.hero_id + "]" + ": Didn't find a scepter...");
         }
-        if(!aghs_element.has_scepter)
+        if(aghs_element.shard.skill_name == "")
         {
           console.log(aghs_element.hero_name + "[" + aghs_element.hero_id + "]" + ": Didn't find a shard...");
+          aghs_element.shard    = null;
         }
-        // push the current hero's element into the array
+
+        // push the current hero's aghs element into the array
         aghs_desc_arr.push(aghs_element);
       });
 
