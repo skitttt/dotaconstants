@@ -682,7 +682,7 @@ const sources = [
     url: aghs_desc_urls,
     transform: (respObj) => {
       const herodata = respObj;
-      aghs_desc_arr = [];
+      aghs_desc_arr = {};
 
       // for every hero
       herodata.forEach( (hd_hero) =>
@@ -692,7 +692,6 @@ const sources = [
         // object to store data about aghs scepter/shard for a hero
         var aghs_element = 
         {
-          hero_name: hd_hero.name,
           hero_id:   hd_hero.id,
           
           scepter: 
@@ -759,16 +758,16 @@ const sources = [
         if(aghs_element.scepter.skill_name == "")
         {
           aghs_element.scepter  = null
-          console.log(aghs_element.hero_name + "[" + aghs_element.hero_id + "]" + ": Didn't find a scepter...");
+          console.log(hd_hero.name + "[" + aghs_element.hero_id + "]" + ": Didn't find a scepter...");
         }
         if(aghs_element.shard.skill_name == "")
         {
-          console.log(aghs_element.hero_name + "[" + aghs_element.hero_id + "]" + ": Didn't find a shard...");
+          console.log(hd_hero.name + "[" + aghs_element.hero_id + "]" + ": Didn't find a shard...");
           aghs_element.shard    = null;
         }
 
         // push the current hero's aghs element into the array
-        aghs_desc_arr.push(aghs_element);
+        aghs_desc_arr[hd_hero.name] = aghs_element;
       });
 
       return aghs_desc_arr;
