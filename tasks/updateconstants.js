@@ -291,25 +291,6 @@ const sources = [
     },
   },
   {
-    key: "item_groups",
-    url: "http://www.dota2.com/jsfeed/itemdata?l=english",
-    transform: (respObj) => {
-      const items = respObj.itemdata;
-      const itemGroups = [];
-      for (const key in items) {
-        if (items[key].components) {
-          const arr = expandItemGroup(key, items);
-          const obj = {};
-          arr.forEach(function (e) {
-            obj[e] = 1;
-          });
-          itemGroups.push(obj);
-        }
-      }
-      return itemGroups;
-    },
-  },
-  {
     key: "abilities",
     url: [
       "https://raw.githubusercontent.com/dotabuff/d2vpkr/master/dota/resource/localization/abilities_english.json",
@@ -388,18 +369,6 @@ const sources = [
           abilities[key] = ability;
         });
       return abilities;
-    },
-  },
-  {
-    key: "ability_keys",
-    url: "http://www.dota2.com/jsfeed/abilitydata?l=english",
-    transform: (respObj) => {
-      const abilityKeys = {};
-      const abilities = respObj.abilitydata;
-      for (const key in abilities) {
-        abilityKeys[key] = 1;
-      }
-      return abilityKeys;
     },
   },
   {
@@ -686,7 +655,10 @@ const sources = [
 
       // for every hero
       herodata.forEach( (hd_hero) =>
-      {        
+      {
+        if (!hd_hero) {
+          return;
+        }
         hd_hero = hd_hero.result.data.heroes[0];
         
         // object to store data about aghs scepter/shard for a hero
